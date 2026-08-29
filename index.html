@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DEVO Store — سنيكرز وكاجوال أصلي | سوهاج</title>
+  <meta name="description"
+    content="DEVO Store — أكبر وأقوى استور أحذية في سوهاج. سنيكرز، شبشب، صنادل وكاجوال أصلي 100%. توصيل لكل محافظات الجمهورية." />
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;800;900&family=Tajawal:wght@400;500;700;900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+  <!-- Loader -->
+  <div class="loader-screen" id="loader-screen">
+    <div class="loader-mark"><img src="assets/logo.jpg" alt="DEVO" /></div>
+    <span>DEVO يفتح لك المتجر...</span>
+  </div>
+
+  <!-- Top marquee -->
+  <div class="topbar">
+    <div class="topbar-track">
+      <span>🔥 شحن مجاني للطلبات فوق 1500 ج.م</span>
+      <span>📦 الدفع عند الاستلام لكل المحافظات</span>
+      <span>✅ منتج أصلي 100%</span>
+      <span>🔥 شحن مجاني للطلبات فوق 1500 ج.م</span>
+      <span>📦 الدفع عند الاستلام لكل المحافظات</span>
+      <span>✅ منتج أصلي 100%</span>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <button class="nav-toggle" id="nav-toggle" aria-label="القائمة">
+        <span></span>
+      </button>
+
+      <a href="#/" class="brand navbar-wordmark" aria-label="DEVO — الرئيسية">
+        <span>DE<span class="brand-v">V</span>O</span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#/">الرئيسية</a>
+        <a href="#/shop">المتجر</a>
+        <a href="#/categories">الفئات</a>
+        <a href="#/about">من نحن</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="icon-btn categories-trigger" id="categories-btn" aria-label="فتح الفئات">
+          <!-- ☰ -->
+        </button>
+        <form class="search-wrap" id="search-form">
+          <input type="text" id="search-input" placeholder="دور على موديل..." />
+        </form>
+        <button class="icon-btn" id="wishlist-btn" aria-label="المفضلة">
+          <span class="badge-count js-wish-badge" style="display: none">0</span>
+        </button>
+        <button class="icon-btn" id="cart-btn" aria-label="السلة">
+          <span class="badge-count js-cart-badge" style="display: none">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobile-menu">
+    <div class="mobile-menu-head">
+      <a href="#/" class="brand" style="color: var(--paper)">
+        <span class="brand-mark"><img src="assets/logo.jpg" alt="DEVO logo" /></span>
+        <span>DE<span class="brand-v">V</span>O</span>
+      </a>
+      <button class="icon-btn" id="mobile-menu-close" style="color: var(--paper)" aria-label="إغلاق"></button>
+    </div>
+    <ul>
+      <li><a href="#/">الرئيسية</a></li>
+      <li><a href="#/shop">المتجر</a></li>
+      <li><a href="#/categories">كل الفئات</a></li>
+      <li><a href="#/shop">كل المنتجات</a></li>
+      <li><a href="#/about">من نحن</a></li>
+    </ul>
+    <form class="mobile-search" id="mobile-search-form">
+      <input type="text" id="mobile-search-input" placeholder="دور على موديل..." />
+    </form>
+    <button class="icon-btn" id="cart-btn-mobile" style="color: var(--paper); margin-top: 20px">
+      <span class="badge-count js-cart-badge" style="display: none">0</span>
+    </button>
+  </div>
+
+  <!-- App mount -->
+  <main id="app"></main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#/" class="brand" style="color: var(--paper)">
+            <span class="brand-mark"><img src="assets/logo.jpg" alt="DEVO logo" /></span>
+            <span>DE<span class="brand-v">V</span>O</span>
+          </a>
+          <p>
+            أكبر وأقوى استور أحذية في سوهاج. سنيكرز، شبشب، صنادل وكاجوال أصلي
+            100%، وتوصيل لكل محافظات الجمهورية.
+          </p>
+          <div class="social-row">
+            <a href="#" aria-label="فيسبوك" id="fb-social"></a>
+            <a href="#" aria-label="إنستجرام" id="ig-social"></a>
+            <a href="#" aria-label="تيك توك" id="tt-social"></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>تسوق</h4>
+          <ul>
+            <li><a href="#/shop?cat=sneakers">سنيكرز</a></li>
+            <li><a href="#/shop?cat=running">جري ورياضة</a></li>
+            <li><a href="#/shop?cat=slides">شبشب رياضي</a></li>
+            <li><a href="#/shop?cat=sandals">صنادل</a></li>
+            <li><a href="#/shop?cat=loafers">كاجوال</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>المتجر</h4>
+          <ul>
+            <li><a href="#/about">من نحن</a></li>
+            <li><a href="#/shop">كل المنتجات</a></li>
+            <li><a href="#/checkout">إتمام الطلب</a></li>
+            <li><a href="#/admin">لوحة الإدارة</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>تواصل معانا</h4>
+          <ul class="footer-contact">
+            <li id="footer-phone"></li>
+            <li id="footer-address"></li>
+            <li id="footer-hours"></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 DEVO — كل الحقوق محفوظة</span>
+        <span>سوهاج، جمهورية مصر العربية</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Cart drawer -->
+  <div class="overlay" id="overlay"></div>
+  <aside class="drawer" id="cart-drawer">
+    <div class="drawer-head">
+      <h3>سلة المشتريات</h3>
+      <button class="icon-btn" id="drawer-close" aria-label="إغلاق"></button>
+    </div>
+    <div class="drawer-body" id="drawer-body"></div>
+    <div class="drawer-foot" id="drawer-foot"></div>
+  </aside>
+
+  <aside class="drawer drawer-left" id="categories-drawer" aria-label="فئات المنتجات">
+    <div class="drawer-head">
+      <h3>تصفح الفئات</h3>
+      <button class="icon-btn" id="categories-drawer-close" aria-label="إغلاق"></button>
+    </div>
+    <div class="drawer-body" id="categories-drawer-body"></div>
+  </aside>
+
+  <!-- Wishlist drawer -->
+  <aside class="drawer" id="wishlist-drawer">
+    <div class="drawer-head">
+      <h3>المفضلة</h3>
+      <button class="icon-btn" id="wishlist-drawer-close" aria-label="إغلاق"></button>
+    </div>
+    <div class="drawer-body" id="wishlist-drawer-body"></div>
+  </aside>
+
+  <!-- Sticky WhatsApp FAB -->
+  <a class="wa-fab" href="https://wa.me/201068333271" target="_blank" rel="noopener" aria-label="تواصل واتساب"
+    id="wa-fab"></a>
+
+  <!-- Mobile bottom nav -->
+  <nav class="mobile-bottom-nav" id="mobile-bottom-nav">
+    <a href="#/" class="mob-nav-item" data-page="home" id="mob-nav-home">
+      <span class="mob-nav-icon"></span>
+      <span>الرئيسية</span>
+    </a>
+    <a href="#/shop" class="mob-nav-item" data-page="shop" id="mob-nav-shop">
+      <span class="mob-nav-icon"></span>
+      <span>المنتجات</span>
+    </a>
+    <button class="mob-nav-item" id="mob-nav-cart">
+      <span class="mob-nav-icon" style="position:relative">
+        <span class="badge-count js-cart-badge" style="display:none">0</span>
+      </span>
+      <span>السلة</span>
+    </button>
+    <button class="mob-nav-item" id="mob-nav-wishlist">
+      <span class="mob-nav-icon" style="position:relative">
+        <span class="badge-count js-wish-badge" style="display:none">0</span>
+      </span>
+      <span>المفضلة</span>
+    </button>
+  </nav>
+
+  <!-- Toasts -->
+  <div class="toast-wrap" id="toast-wrap"></div>
+
+  <script src="js/lib/sql-wasm.js"></script>
+  <script src="js/db.js?v=3"></script>
+  <script src="js/cart.js"></script>
+  <script type="module">
+    import { Icons } from "./js/icons.js";
+    document.getElementById("nav-toggle").innerHTML = Icons.menu;
+    document.getElementById("mobile-menu-close").innerHTML = Icons.close;
+    document.getElementById("cart-btn").innerHTML += Icons.cart;
+    document.getElementById("cart-btn-mobile").innerHTML += Icons.cart;
+    document.getElementById("wishlist-btn").innerHTML += Icons.heart;
+    document
+      .querySelectorAll(".search-wrap")
+      .forEach((w) => (w.innerHTML += Icons.search));
+    document.getElementById("drawer-close").innerHTML = Icons.close;
+    document.getElementById("categories-drawer-close").innerHTML =
+      Icons.close;
+    document.getElementById("wishlist-drawer-close").innerHTML = Icons.close;
+    document.getElementById("wa-fab").innerHTML = Icons.whatsapp;
+    // Mobile bottom nav icons
+    document.getElementById("mob-nav-home").querySelector(".mob-nav-icon").innerHTML = Icons.home;
+    document.getElementById("mob-nav-shop").querySelector(".mob-nav-icon").innerHTML = Icons.shoe;
+    document.getElementById("mob-nav-cart").querySelector(".mob-nav-icon").innerHTML += Icons.cart;
+    document.getElementById("mob-nav-wishlist").querySelector(".mob-nav-icon").innerHTML += Icons.heart;
+    document.getElementById("fb-social").innerHTML = Icons.facebook;
+    document.getElementById("ig-social").innerHTML = Icons.instagram;
+    document.getElementById("tt-social").innerHTML = Icons.tiktok;
+    document.getElementById("footer-phone").innerHTML =
+      `${Icons.phone}<span dir="ltr">01068333271</span>`;
+    document.getElementById("footer-address").innerHTML =
+      `${Icons.pin}<span>شارع الجمهورية، سوهاج</span>`;
+    document.getElementById("footer-hours").innerHTML =
+      `${Icons.clock}<span>يوميًا 11 ص - 11 م</span>`;
+
+    import("./js/app.js?v=8").then((m) => m.boot());
+  </script>
+</body>
+
+</html>
