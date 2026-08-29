@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us — DEVO Store</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div id="nav-mount"></div>
+
+<div class="page-hero">
+  <h1>CONTACT US</h1>
+  <p>We're here to help — reach out any time</p>
+</div>
+
+<section class="section">
+  <div style="max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start">
+    <!-- Contact Form -->
+    <div class="admin-card">
+      <div class="admin-card-header"><h3>📩 Send Us a Message</h3></div>
+      <div style="padding:2rem">
+        <form id="contact-form">
+          <div class="form-group">
+            <label>Your Name *</label>
+            <input type="text" id="contact-name" placeholder="Ahmed Mohamed" required>
+          </div>
+          <div class="form-group">
+            <label>Email Address *</label>
+            <input type="email" id="contact-email" placeholder="your@email.com" required>
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" id="contact-phone" placeholder="010 XXXXXXXX">
+          </div>
+          <div class="form-group">
+            <label>Subject *</label>
+            <select id="contact-subject">
+              <option value="">Select a subject</option>
+              <option>Order Inquiry</option>
+              <option>Product Question</option>
+              <option>Return / Exchange</option>
+              <option>Delivery Issue</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Message *</label>
+            <textarea id="contact-message" rows="5" placeholder="How can we help you?" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full btn-lg">Send Message →</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Contact Info -->
+    <div>
+      <h2 style="font-size:2rem;margin-bottom:2rem">GET IN TOUCH</h2>
+      <div style="display:flex;flex-direction:column;gap:1.5rem">
+        <div style="display:flex;gap:1.2rem;align-items:flex-start">
+          <div style="width:52px;height:52px;background:var(--amber);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0">📍</div>
+          <div>
+            <div style="font-weight:700;font-size:1rem;margin-bottom:0.3rem">Store Address</div>
+            <div style="color:var(--gray-dark)">Sharia Al-Jumhuriya, Sohag, Egypt, 82511</div>
+            <a href="https://www.bing.com/maps/default.aspx?v=2&pc=FACEBK&mid=8100&where1=%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%AC%D9%85%D9%87%D9%88%D8%B1%D9%8A%D8%A9%20%2C%20Sohag%2C%20Egypt%2C%2082511" target="_blank" style="color:var(--amber);font-size:0.85rem;text-decoration:none">Get Directions →</a>
+          </div>
+        </div>
+        <div style="display:flex;gap:1.2rem;align-items:flex-start">
+          <div style="width:52px;height:52px;background:var(--amber);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0">📞</div>
+          <div>
+            <div style="font-weight:700;font-size:1rem;margin-bottom:0.3rem">Phone</div>
+            <a href="tel:+201068333271" style="color:var(--gray-dark);text-decoration:none;display:block">010 68333271</a>
+            <a href="tel:+201068333271" style="color:var(--gray-dark);text-decoration:none;display:block">+20 10 68333271</a>
+          </div>
+        </div>
+        <div style="display:flex;gap:1.2rem;align-items:flex-start">
+          <div style="width:52px;height:52px;background:var(--amber);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0">💬</div>
+          <div>
+            <div style="font-weight:700;font-size:1rem;margin-bottom:0.3rem">WhatsApp</div>
+            <a href="https://wa.me/201068333271" target="_blank" style="color:var(--amber);text-decoration:none">Chat with us on WhatsApp →</a>
+          </div>
+        </div>
+        <div style="display:flex;gap:1.2rem;align-items:flex-start">
+          <div style="width:52px;height:52px;background:var(--amber);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0">🕘</div>
+          <div>
+            <div style="font-weight:700;font-size:1rem;margin-bottom:0.3rem">Store Hours</div>
+            <div style="color:var(--gray-dark)">Saturday – Thursday: 10:00 AM – 10:00 PM</div>
+            <div style="color:var(--gray-dark)">Friday: 2:00 PM – 10:00 PM</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:2.5rem;background:var(--black);border-radius:16px;padding:2rem;color:white">
+        <h3 style="color:var(--amber);margin-bottom:1rem">📱 Follow Us</h3>
+        <p style="color:rgba(255,255,255,0.7);font-size:0.9rem;margin-bottom:1.2rem">Stay updated with new arrivals, exclusive deals, and more.</p>
+        <div style="display:flex;gap:0.8rem">
+          <a href="#" class="social-link">📘 Facebook</a>
+          <a href="#" class="social-link">📸 Instagram</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="footer-mount"></div>
+<script src="../js/components.js"></script>
+<script src="../js/main.js"></script>
+<script>
+document.getElementById('contact-form').addEventListener('submit', e => {
+  e.preventDefault();
+  showToast('Message sent! We\'ll get back to you soon. 📩', 'success');
+  document.getElementById('contact-form').reset();
+});
+</script>
+</body>
+</html>

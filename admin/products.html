@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products — DEVO Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar-logo">
+      <a href="/index.html" class="logo-text" style="text-decoration:none;display:block">DE<span style="color:var(--amber)">V</span>O</a>
+      <div style="color:rgba(255,255,255,0.4);font-size:0.75rem;margin-top:4px;text-transform:uppercase;letter-spacing:0.1em">Admin Panel</div>
+    </div>
+    <nav class="admin-nav">
+      <a href="dashboard.html" class="admin-nav-item"><span class="nav-icon">📊</span> Dashboard</a>
+      <a href="products.html" class="admin-nav-item active"><span class="nav-icon">👟</span> Products</a>
+      <a href="orders.html" class="admin-nav-item"><span class="nav-icon">📦</span> Orders</a>
+      <a href="customers.html" class="admin-nav-item"><span class="nav-icon">👥</span> Customers</a>
+      <div style="border-top:1px solid rgba(255,255,255,0.1);margin:1rem 0"></div>
+      <a href="/index.html" class="admin-nav-item"><span class="nav-icon">🏪</span> View Store</a>
+      <a href="#" class="admin-nav-item" onclick="Auth.logout()" style="color:var(--danger)!important"><span class="nav-icon">🚪</span> Logout</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h2>👟 Products Management</h2>
+      <button class="btn btn-primary" onclick="openProductModal()">+ Add New Product</button>
+    </div>
+
+    <div class="admin-content">
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h3>All Products</h3>
+          <input type="text" id="prod-search" placeholder="Search..." style="padding:6px 12px;border:2px solid var(--gray-light);border-radius:var(--radius);font-size:0.85rem;outline:none" oninput="filterProducts(this.value)">
+        </div>
+        <div style="overflow-x:auto">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Featured</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="products-tbody">
+              <tr><td colspan="7"><div class="loader"><div class="spinner"></div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Product Modal -->
+<div class="modal-overlay" id="product-modal">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-header">
+      <h3 id="modal-title">Add New Product</h3>
+      <button class="modal-close" onclick="closeModal('product-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-id">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Product Name *</label>
+          <input type="text" id="prod-name" placeholder="DEVO Runner Pro" required>
+        </div>
+        <div class="form-group">
+          <label>Category *</label>
+          <select id="prod-category">
+            <option value="Running">Running</option>
+            <option value="Lifestyle">Lifestyle</option>
+            <option value="Sports">Sports</option>
+            <option value="Training">Training</option>
+            <option value="Kids">Kids</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Description *</label>
+        <textarea id="prod-desc" rows="3" placeholder="Product description..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Price (EGP) *</label>
+          <input type="number" id="prod-price" placeholder="1299" min="0">
+        </div>
+        <div class="form-group">
+          <label>Sale Price (EGP — optional)</label>
+          <input type="number" id="prod-sale-price" placeholder="999" min="0">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Gender</label>
+          <select id="prod-gender">
+            <option value="Men">Men</option>
+            <option value="Women">Women</option>
+            <option value="Unisex">Unisex</option>
+            <option value="Kids">Kids</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Stock Quantity *</label>
+          <input type="number" id="prod-stock" placeholder="50" min="0">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Image URL *</label>
+        <input type="url" id="prod-image" placeholder="https://images.unsplash.com/...">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Sizes (comma-separated)</label>
+          <input type="text" id="prod-sizes" placeholder="40,41,42,43,44,45">
+        </div>
+        <div class="form-group">
+          <label>Colors (comma-separated)</label>
+          <input type="text" id="prod-colors" placeholder="Black,White,Red">
+        </div>
+      </div>
+      <div class="form-group" style="display:flex;align-items:center;gap:0.8rem">
+        <input type="checkbox" id="prod-featured" style="width:18px;height:18px;cursor:pointer">
+        <label for="prod-featured" style="cursor:pointer;font-weight:600">Featured Product (shown on homepage)</label>
+      </div>
+      <div style="display:flex;gap:1rem;margin-top:1.5rem">
+        <button class="btn btn-primary btn-lg" onclick="saveProduct()">Save Product</button>
+        <button class="btn btn-outline" onclick="closeModal('product-modal')">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../js/main.js"></script>
+<script>
+(function() { const u = Auth.get(); if (!u || u.role !== 'admin') window.location.href = '/index.html'; })();
+
+let allProducts = [];
+
+async function loadProducts() {
+  allProducts = await API.get('/products');
+  renderProducts(allProducts);
+}
+
+function filterProducts(q) {
+  const filtered = allProducts.filter(p =>
+    p.name.toLowerCase().includes(q.toLowerCase()) ||
+    p.category.toLowerCase().includes(q.toLowerCase())
+  );
+  renderProducts(filtered);
+}
+
+function renderProducts(products) {
+  document.getElementById('products-tbody').innerHTML = products.length ? products.map(p => `
+    <tr>
+      <td><img src="${p.image_url}" style="width:60px;height:50px;object-fit:cover;border-radius:6px;background:var(--gray-light)"
+          onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200'"></td>
+      <td><strong>${p.name}</strong><br><span style="font-size:0.75rem;color:var(--gray-mid)">${p.gender}</span></td>
+      <td><span class="status-badge" style="background:var(--amber-bg);color:var(--amber-dark)">${p.category}</span></td>
+      <td>
+        <strong>${formatPrice(p.sale_price || p.price)}</strong>
+        ${p.sale_price ? `<br><span style="font-size:0.75rem;color:var(--gray-mid);text-decoration:line-through">${formatPrice(p.price)}</span>` : ''}
+      </td>
+      <td><span style="color:${p.stock > 10 ? 'var(--success)' : p.stock > 0 ? 'orange' : 'var(--danger)'}">● ${p.stock}</span></td>
+      <td>${p.featured ? '<span style="color:var(--amber)">★ Yes</span>' : '<span style="color:var(--gray-mid)">No</span>'}</td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-sm btn-outline" onclick="editProduct(${p.id})" style="margin-right:0.4rem">✏️ Edit</button>
+        <button class="btn btn-sm" style="background:var(--danger);color:white" onclick="deleteProduct(${p.id})">🗑️</button>
+      </td>
+    </tr>
+  `).join('') : '<tr><td colspan="7"><div class="empty-state" style="padding:2rem"><div class="empty-icon">👟</div><h3>No products found</h3></div></td></tr>';
+}
+
+function openProductModal(product = null) {
+  document.getElementById('modal-title').textContent = product ? 'Edit Product' : 'Add New Product';
+  document.getElementById('edit-id').value = product?.id || '';
+  document.getElementById('prod-name').value = product?.name || '';
+  document.getElementById('prod-desc').value = product?.description || '';
+  document.getElementById('prod-price').value = product?.price || '';
+  document.getElementById('prod-sale-price').value = product?.sale_price || '';
+  document.getElementById('prod-category').value = product?.category || 'Running';
+  document.getElementById('prod-gender').value = product?.gender || 'Men';
+  document.getElementById('prod-stock').value = product?.stock || '';
+  document.getElementById('prod-image').value = product?.image_url || '';
+  document.getElementById('prod-sizes').value = product?.sizes || '';
+  document.getElementById('prod-colors').value = product?.colors || '';
+  document.getElementById('prod-featured').checked = !!product?.featured;
+  openModal('product-modal');
+}
+
+function editProduct(id) {
+  const p = allProducts.find(p => p.id === id);
+  if (p) openProductModal(p);
+}
+
+async function saveProduct() {
+  const id = document.getElementById('edit-id').value;
+  const data = {
+    name: document.getElementById('prod-name').value.trim(),
+    description: document.getElementById('prod-desc').value.trim(),
+    price: parseFloat(document.getElementById('prod-price').value),
+    sale_price: parseFloat(document.getElementById('prod-sale-price').value) || null,
+    category: document.getElementById('prod-category').value,
+    gender: document.getElementById('prod-gender').value,
+    stock: parseInt(document.getElementById('prod-stock').value) || 0,
+    image_url: document.getElementById('prod-image').value.trim(),
+    sizes: document.getElementById('prod-sizes').value.trim(),
+    colors: document.getElementById('prod-colors').value.trim(),
+    featured: document.getElementById('prod-featured').checked
+  };
+  if (!data.name || !data.price) return showToast('Name and price are required', 'error');
+
+  if (id) await API.put(`/products/${id}`, data);
+  else await API.post('/products', data);
+
+  showToast(id ? 'Product updated! ✅' : 'Product added! ✅', 'success');
+  closeModal('product-modal');
+  loadProducts();
+}
+
+async function deleteProduct(id) {
+  if (!confirm('Delete this product? This cannot be undone.')) return;
+  await API.delete(`/products/${id}`);
+  showToast('Product deleted', 'success');
+  loadProducts();
+}
+
+document.addEventListener('DOMContentLoaded', loadProducts);
+</script>
+</body>
+</html>

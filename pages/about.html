@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us — DEVO Store</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .about-hero {
+      background: linear-gradient(135deg, var(--black) 0%, #2D1A00 100%);
+      min-height: 70vh;
+      display: flex;
+      align-items: center;
+      padding: 80px 8%;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-hero::before {
+      content: 'DEVO';
+      position: absolute;
+      font-family: var(--font-display);
+      font-size: 30vw;
+      font-weight: 900;
+      color: rgba(245,166,35,0.04);
+      right: -5%;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+    .about-hero-content { max-width: 650px; }
+    .about-hero h1 {
+      font-size: clamp(3rem, 6vw, 5rem);
+      color: var(--white);
+      line-height: 0.95;
+      margin-bottom: 1.5rem;
+    }
+    .about-hero p {
+      color: rgba(255,255,255,0.7);
+      font-size: 1.15rem;
+      line-height: 1.8;
+      max-width: 540px;
+    }
+    .story-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .story-img { border-radius: 16px; overflow: hidden; }
+    .story-img img { width: 100%; height: 450px; object-fit: cover; }
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .value-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+      border-top: 4px solid var(--amber);
+      transition: transform 0.25s ease;
+    }
+    .value-card:hover { transform: translateY(-6px); }
+    .value-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    .value-title { font-size: 1.2rem; margin-bottom: 0.8rem; }
+    .value-desc { color: var(--gray-dark); font-size: 0.9rem; line-height: 1.7; }
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+    .team-card { text-align: center; }
+    .team-avatar {
+      width: 100px;
+      height: 100px;
+      background: var(--amber);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      margin: 0 auto 1rem;
+    }
+    .team-name { font-weight: 700; font-size: 1rem; }
+    .team-role { color: var(--gray-mid); font-size: 0.85rem; }
+    .store-map {
+      background: var(--black);
+      border-radius: 16px;
+      padding: 2.5rem;
+      color: var(--white);
+    }
+    .store-map h3 { color: var(--amber); font-size: 1.5rem; margin-bottom: 1.5rem; }
+    .info-row { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem; font-size: 0.95rem; color: rgba(255,255,255,0.8); }
+    .info-row .icon { font-size: 1.2rem; flex-shrink: 0; width: 28px; }
+    @media (max-width: 768px) {
+      .story-section { grid-template-columns: 1fr; }
+      .values-grid { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<!-- HERO -->
+<div class="about-hero">
+  <div class="about-hero-content">
+    <span class="hero-label">Our Story</span>
+    <h1>WE ARE <span style="color:var(--amber)">DEVO</span><br>STORE</h1>
+    <p>Born in the heart of Sohag, DEVO Store is your trusted destination for premium footwear. We believe quality shoes should be within reach of everyone who dares to step forward.</p>
+    <a href="/pages/shop.html" class="btn btn-primary btn-lg" style="margin-top:2rem">Shop the Collection →</a>
+  </div>
+</div>
+
+<!-- STORY -->
+<section class="section">
+  <div class="story-section">
+    <div class="story-img">
+      <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&q=80" alt="DEVO Store Interior">
+    </div>
+    <div>
+      <span class="section-label">How We Started</span>
+      <h2 style="font-size:2.5rem;margin:0.8rem 0 1.5rem">From One Street<br>To Your <span style="color:var(--amber)">Doorstep</span></h2>
+      <p style="color:var(--gray-dark);line-height:1.8;margin-bottom:1.2rem">DEVO Store started with a simple idea: bring world-class footwear to Sohag. Our founder, driven by a passion for quality and community, opened the doors of our flagship store on Sharia Al-Jumhuriya with just a handful of curated styles.</p>
+      <p style="color:var(--gray-dark);line-height:1.8;margin-bottom:1.2rem">Today, we serve thousands of customers across Sohag Governorate — both from our beloved physical store and through our growing online platform. Every pair we sell carries the promise of authenticity, comfort, and style.</p>
+      <p style="color:var(--gray-dark);line-height:1.8">We don't just sell shoes. We help you walk confidently through every chapter of your life.</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2.5rem">
+        <div style="text-align:center;padding:1.2rem;background:var(--amber-bg);border-radius:var(--radius)">
+          <div style="font-family:var(--font-display);font-size:2rem;font-weight:900;color:var(--amber)">5+</div>
+          <div style="font-size:0.8rem;color:var(--gray-dark);text-transform:uppercase;letter-spacing:0.06em">Years in Business</div>
+        </div>
+        <div style="text-align:center;padding:1.2rem;background:var(--amber-bg);border-radius:var(--radius)">
+          <div style="font-family:var(--font-display);font-size:2rem;font-weight:900;color:var(--amber)">10K+</div>
+          <div style="font-size:0.8rem;color:var(--gray-dark);text-transform:uppercase;letter-spacing:0.06em">Happy Customers</div>
+        </div>
+        <div style="text-align:center;padding:1.2rem;background:var(--amber-bg);border-radius:var(--radius)">
+          <div style="font-family:var(--font-display);font-size:2rem;font-weight:900;color:var(--amber)">500+</div>
+          <div style="font-size:0.8rem;color:var(--gray-dark);text-transform:uppercase;letter-spacing:0.06em">Shoe Styles</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section class="section bg-gray">
+  <div class="section-header">
+    <span class="section-label">What We Stand For</span>
+    <h2 class="section-title">Our Values</h2>
+    <p class="section-sub">Everything we do is guided by a commitment to our customers and community.</p>
+  </div>
+  <div class="values-grid">
+    <div class="value-card">
+      <div class="value-icon">🏆</div>
+      <h3 class="value-title">Quality First</h3>
+      <p class="value-desc">Every pair goes through rigorous quality checks. We only stock shoes we'd wear ourselves — because your trust is everything to us.</p>
+    </div>
+    <div class="value-card">
+      <div class="value-icon">🤝</div>
+      <h3 class="value-title">Community Driven</h3>
+      <p class="value-desc">We're not just a store — we're part of Sohag. We support local events, employ local staff, and reinvest in our community.</p>
+    </div>
+    <div class="value-card">
+      <div class="value-icon">💡</div>
+      <h3 class="value-title">Always Innovating</h3>
+      <p class="value-desc">We constantly update our collection to bring you the latest styles and technologies in footwear. Staying ahead so you always do too.</p>
+    </div>
+    <div class="value-card">
+      <div class="value-icon">💬</div>
+      <h3 class="value-title">Honest Service</h3>
+      <p class="value-desc">No hidden fees, no fake discounts. What you see is what you get — fair prices, real products, genuine advice.</p>
+    </div>
+    <div class="value-card">
+      <div class="value-icon">🚚</div>
+      <h3 class="value-title">Fast & Reliable</h3>
+      <p class="value-desc">Orders are processed same-day and delivered with care. We treat every package like it's going to our own family.</p>
+    </div>
+    <div class="value-card">
+      <div class="value-icon">🌍</div>
+      <h3 class="value-title">Accessible to All</h3>
+      <p class="value-desc">Quality footwear shouldn't be a luxury. We offer options for every budget — from everyday essentials to premium picks.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="section">
+  <div class="section-header">
+    <span class="section-label">The People Behind DEVO</span>
+    <h2 class="section-title">Meet Our Team</h2>
+    <p class="section-sub">A passionate team dedicated to finding you the perfect pair.</p>
+  </div>
+  <div class="team-grid">
+    <div class="team-card">
+      <div class="team-avatar">👨‍💼</div>
+      <div class="team-name">Mohamed Ali</div>
+      <div class="team-role">Founder & CEO</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar">👩‍🎨</div>
+      <div class="team-name">Nour Ahmed</div>
+      <div class="team-role">Head of Buying</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar">👨‍💻</div>
+      <div class="team-name">Youssef Khaled</div>
+      <div class="team-role">Operations Manager</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar">👩‍🤝‍👩</div>
+      <div class="team-name">Amira Hassan</div>
+      <div class="team-role">Customer Experience</div>
+    </div>
+  </div>
+</section>
+
+<!-- STORE INFO -->
+<section class="section" style="background:var(--black)">
+  <div style="max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center">
+    <div>
+      <span class="section-label">Find Us</span>
+      <h2 style="color:white;font-size:2.5rem;margin:0.8rem 0 2rem">Visit Our <span style="color:var(--amber)">Store</span></h2>
+      <div class="store-map">
+        <h3>📍 DEVO Store — Sohag</h3>
+        <div class="info-row"><span class="icon">🏪</span><span>Sharia Al-Jumhuriya, Sohag, Egypt, 82511</span></div>
+        <div class="info-row"><span class="icon">📞</span><span><a href="tel:+201068333271" style="color:var(--amber)">010 68333271</a></span></div>
+        <div class="info-row"><span class="icon">🕘</span><span>Saturday – Thursday: 10:00 AM – 10:00 PM</span></div>
+        <div class="info-row"><span class="icon">🕑</span><span>Friday: 2:00 PM – 10:00 PM</span></div>
+        <div class="info-row"><span class="icon">💬</span>
+          <span><a href="https://wa.me/201068333271" target="_blank" style="color:var(--amber)">WhatsApp Us</a> for quick questions</span>
+        </div>
+        <a href="https://www.bing.com/maps/default.aspx?v=2&pc=FACEBK&mid=8100&where1=%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%AC%D9%85%D9%87%D9%88%D8%B1%D9%8A%D8%A9%20%2C%20Sohag%2C%20Egypt%2C%2082511" target="_blank" class="btn btn-primary" style="margin-top:1.5rem">Get Directions →</a>
+      </div>
+    </div>
+    <div>
+      <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=500&q=80" alt="Store" style="border-radius:16px;width:100%;height:380px;object-fit:cover;box-shadow:var(--shadow)">
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="newsletter-section">
+  <h2>READY TO FIND YOUR PAIR?</h2>
+  <p>Browse our full collection and discover shoes made for every step of your journey.</p>
+  <a href="/pages/shop.html" class="btn btn-dark btn-lg" style="display:inline-flex">Shop Now →</a>
+</div>
+
+<div id="footer-mount"></div>
+<script src="../js/components.js"></script>
+<script src="../js/main.js"></script>
+</body>
+</html>

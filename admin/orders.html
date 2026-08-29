@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orders — DEVO Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar-logo">
+      <a href="/index.html" class="logo-text" style="text-decoration:none;display:block">DE<span style="color:var(--amber)">V</span>O</a>
+      <div style="color:rgba(255,255,255,0.4);font-size:0.75rem;margin-top:4px;text-transform:uppercase;letter-spacing:0.1em">Admin Panel</div>
+    </div>
+    <nav class="admin-nav">
+      <a href="dashboard.html" class="admin-nav-item"><span class="nav-icon">📊</span> Dashboard</a>
+      <a href="products.html" class="admin-nav-item"><span class="nav-icon">👟</span> Products</a>
+      <a href="orders.html" class="admin-nav-item active"><span class="nav-icon">📦</span> Orders</a>
+      <a href="customers.html" class="admin-nav-item"><span class="nav-icon">👥</span> Customers</a>
+      <div style="border-top:1px solid rgba(255,255,255,0.1);margin:1rem 0"></div>
+      <a href="/index.html" class="admin-nav-item"><span class="nav-icon">🏪</span> View Store</a>
+      <a href="#" class="admin-nav-item" onclick="Auth.logout()" style="color:var(--danger)!important"><span class="nav-icon">🚪</span> Logout</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h2>📦 Orders Management</h2>
+      <div style="display:flex;gap:0.8rem">
+        <select id="status-filter" class="filter-select" onchange="filterByStatus(this.value)">
+          <option value="">All Statuses</option>
+          <option value="pending">Pending</option>
+          <option value="processing">Processing</option>
+          <option value="shipped">Shipped</option>
+          <option value="delivered">Delivered</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="admin-content">
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h3>All Orders</h3>
+          <span id="order-count" style="color:var(--gray-mid);font-size:0.85rem"></span>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Order #</th>
+                <th>Customer</th>
+                <th>Phone</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="orders-tbody">
+              <tr><td colspan="7"><div class="loader"><div class="spinner"></div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Order Detail Modal -->
+<div class="modal-overlay" id="order-modal">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-header">
+      <h3 id="order-modal-title">Order Details</h3>
+      <button class="modal-close" onclick="closeModal('order-modal')">✕</button>
+    </div>
+    <div class="modal-body" id="order-modal-body">
+      <div class="loader"><div class="spinner"></div></div>
+    </div>
+  </div>
+</div>
+
+<script src="../js/main.js"></script>
+<script>
+(function() { const u = Auth.get(); if (!u || u.role !== 'admin') window.location.href = '/index.html'; })();
+
+let allOrders = [];
+
+async function loadOrders() {
+  allOrders = await API.get('/orders');
+  renderOrders(allOrders);
+}
+
+function filterByStatus(status) {
+  const filtered = status ? allOrders.filter(o => o.status === status) : allOrders;
+  renderOrders(filtered);
+}
+
+function renderOrders(orders) {
+  document.getElementById('order-count').textContent = `${orders.length} order${orders.length !== 1 ? 's' : ''}`;
+  document.getElementById('orders-tbody').innerHTML = orders.length ? orders.map(o => `
+    <tr>
+      <td><strong>#${o.id}</strong></td>
+      <td>${o.customer_name || o.shipping_name || 'Guest'}</td>
+      <td>${o.shipping_phone || '—'}</td>
+      <td><strong>${formatPrice(o.total)}</strong></td>
+      <td>
+        <select class="filter-select" style="padding:4px 8px;font-size:0.8rem" onchange="updateStatus(${o.id}, this.value)">
+          ${['pending','processing','shipped','delivered','cancelled'].map(s =>
+            `<option value="${s}" ${o.status === s ? 'selected' : ''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`
+          ).join('')}
+        </select>
+      </td>
+      <td>${formatDate(o.created_at)}</td>
+      <td>
+        <button class="btn btn-sm btn-outline" onclick="viewOrder(${o.id})">👁 View</button>
+      </td>
+    </tr>
+  `).join('') : '<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">📦</div><h3>No orders yet</h3></div></td></tr>';
+}
+
+async function updateStatus(id, status) {
+  await API.put(`/orders/${id}/status`, { status });
+  const order = allOrders.find(o => o.id === id);
+  if (order) order.status = status;
+  showToast(`Order #${id} → ${status}`, 'success');
+}
+
+async function viewOrder(id) {
+  document.getElementById('order-modal-title').textContent = `Order #${id}`;
+  document.getElementById('order-modal-body').innerHTML = '<div class="loader"><div class="spinner"></div></div>';
+  openModal('order-modal');
+
+  const order = await API.get(`/orders/${id}`);
+  document.getElementById('order-modal-body').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;padding:1rem;background:var(--gray-light);border-radius:var(--radius)">
+      <div><div style="font-size:0.75rem;color:var(--gray-mid);text-transform:uppercase;letter-spacing:0.06em">Customer</div><div style="font-weight:700">${order.customer_name || 'Guest'}</div></div>
+      <div><div style="font-size:0.75rem;color:var(--gray-mid);text-transform:uppercase;letter-spacing:0.06em">Status</div><span class="status-badge status-${order.status}">${order.status}</span></div>
+      <div><div style="font-size:0.75rem;color:var(--gray-mid);text-transform:uppercase;letter-spacing:0.06em">Phone</div><div>${order.shipping_phone || '—'}</div></div>
+      <div><div style="font-size:0.75rem;color:var(--gray-mid);text-transform:uppercase;letter-spacing:0.06em">Date</div><div>${formatDate(order.created_at)}</div></div>
+      <div style="grid-column:1/-1"><div style="font-size:0.75rem;color:var(--gray-mid);text-transform:uppercase;letter-spacing:0.06em">Delivery Address</div><div>${order.shipping_address || '—'}</div></div>
+      ${order.notes ? `<div style="grid-column:1/-1"><div style="font-size:0.75rem;color:var(--gray-mid);text-transform:uppercase;letter-spacing:0.06em">Notes</div><div>${order.notes}</div></div>` : ''}
+    </div>
+    <h4 style="margin-bottom:1rem">Order Items</h4>
+    ${order.items?.map(i => `
+      <div style="display:flex;align-items:center;gap:1rem;padding:0.8rem 0;border-bottom:1px solid var(--gray-light)">
+        <img src="${i.image_url}" style="width:55px;height:55px;object-fit:cover;border-radius:8px"
+             onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200'">
+        <div style="flex:1">
+          <div style="font-weight:700">${i.name}</div>
+          <div style="font-size:0.8rem;color:var(--gray-mid)">Size: ${i.size} | ${i.color} | ×${i.quantity}</div>
+        </div>
+        <div style="font-weight:700">${formatPrice(i.price * i.quantity)}</div>
+      </div>
+    `).join('') || ''}
+    <div style="display:flex;justify-content:space-between;padding:1rem 0;font-size:1.2rem;font-weight:700;border-top:2px solid var(--black);margin-top:0.5rem">
+      <span>Total</span><span style="color:var(--amber)">${formatPrice(order.total)}</span>
+    </div>
+  `;
+}
+
+document.addEventListener('DOMContentLoaded', loadOrders);
+</script>
+</body>
+</html>

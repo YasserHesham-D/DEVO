@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product — DEVO Store</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<div class="breadcrumb" id="breadcrumb">
+  <a href="/index.html">Home</a><span>›</span>
+  <a href="/pages/shop.html">Shop</a><span>›</span>
+  <span id="breadcrumb-name">Product</span>
+</div>
+
+<section class="section" id="product-section">
+  <div class="loader"><div class="spinner"></div></div>
+</section>
+
+<!-- REVIEWS SECTION -->
+<section class="section bg-gray" id="reviews-section" style="display:none">
+  <div style="max-width:800px;margin:0 auto">
+    <h2 style="margin-bottom:2rem">Customer Reviews</h2>
+    <div id="reviews-list"></div>
+    <div id="review-form-wrap" style="margin-top:2rem;background:white;border-radius:12px;padding:2rem;box-shadow:var(--shadow)">
+      <h3 style="margin-bottom:1.5rem">Write a Review</h3>
+      <div id="review-login-prompt" style="display:none">
+        <p style="color:var(--gray-dark)">Please <a href="#" style="color:var(--amber)" onclick="openModal('login-modal')">login</a> to write a review.</p>
+      </div>
+      <form id="review-form">
+        <div class="form-group">
+          <label>Rating</label>
+          <div style="display:flex;gap:0.5rem;font-size:2rem;cursor:pointer" id="star-selector">
+            <span data-val="1">☆</span><span data-val="2">☆</span>
+            <span data-val="3">☆</span><span data-val="4">☆</span><span data-val="5">☆</span>
+          </div>
+          <input type="hidden" id="review-rating" value="0">
+        </div>
+        <div class="form-group">
+          <label>Your Review</label>
+          <textarea id="review-comment" rows="4" placeholder="Tell others what you think about this product..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Review</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<div id="footer-mount"></div>
+
+<script src="../js/components.js"></script>
+<script src="../js/main.js"></script>
+<script>
+let currentProduct = null;
+let selectedSize = '';
+let selectedColor = '';
+let quantity = 1;
+
+async function loadProduct() {
+  const id = new URLSearchParams(window.location.search).get('id');
+  if (!id) return window.location.href = '/pages/shop.html';
+
+  const product = await API.get(`/products/${id}`);
+  if (product.error) return window.location.href = '/pages/shop.html';
+
+  currentProduct = product;
+  document.title = `${product.name} — DEVO Store`;
+  document.getElementById('breadcrumb-name').textContent = product.name;
+
+  const sizes = product.sizes ? product.sizes.split(',') : [];
+  const colors = product.colors ? product.colors.split(',') : [];
+  const price = product.sale_price ? product.sale_price : product.price;
+  const avgRating = product.reviews?.length
+    ? Math.round(product.reviews.reduce((s, r) => s + r.rating, 0) / product.reviews.length)
+    : 0;
+
+  document.getElementById('product-section').innerHTML = `
+    <div class="product-detail-grid">
+      <div class="product-gallery">
+        <img src="${product.image_url}" alt="${product.name}" id="main-img"
+             onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800'"
+             style="width:100%;border-radius:16px;object-fit:cover;max-height:520px;box-shadow:var(--shadow)">
+        <div style="display:flex;gap:0.8rem;margin-top:1rem">
+          <img src="${product.image_url}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;cursor:pointer;border:3px solid var(--amber)"
+               onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200'">
+        </div>
+      </div>
+      <div class="product-detail-info">
+        <span class="product-category-tag">${product.category} · ${product.gender}</span>
+        <h1>${product.name}</h1>
+        <div style="display:flex;align-items:center;gap:0.8rem;margin:0.5rem 0">
+          <div>${renderStars(avgRating)}</div>
+          <span style="color:var(--gray-mid);font-size:0.85rem">${product.reviews?.length || 0} review${product.reviews?.length !== 1 ? 's' : ''}</span>
+        </div>
+        <div class="product-detail-price">
+          <span class="current ${product.sale_price ? 'price-sale' : ''}">${formatPrice(price)}</span>
+          ${product.sale_price ? `<span class="original">${formatPrice(product.price)}</span>` : ''}
+          ${product.sale_price ? `<span style="background:var(--danger);color:white;padding:4px 10px;border-radius:4px;font-size:0.8rem;font-weight:700">SAVE ${Math.round((1 - product.sale_price/product.price)*100)}%</span>` : ''}
+        </div>
+        <p class="product-description">${product.description}</p>
+
+        ${sizes.length ? `
+        <div class="form-group">
+          <label>Select Size</label>
+          <div class="size-grid">
+            ${sizes.map(s => `<button class="size-btn" onclick="selectSize('${s}',this)">${s}</button>`).join('')}
+          </div>
+        </div>` : ''}
+
+        ${colors.length ? `
+        <div class="form-group">
+          <label>Select Color</label>
+          <div class="color-options">
+            ${colors.map(c => `<button class="color-chip" onclick="selectColor('${c}',this)">${c}</button>`).join('')}
+          </div>
+        </div>` : ''}
+
+        <div class="form-group">
+          <label>Quantity</label>
+          <div class="qty-selector">
+            <button class="qty-btn" onclick="changeQty(-1)">−</button>
+            <input class="qty-input" type="number" id="qty-input" value="1" min="1" max="${product.stock}" readonly>
+            <button class="qty-btn" onclick="changeQty(1)">+</button>
+          </div>
+          <div style="font-size:0.8rem;color:var(--gray-mid);margin-top:0.4rem">${product.stock > 0 ? `✅ ${product.stock} in stock` : '❌ Out of stock'}</div>
+        </div>
+
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.5rem">
+          <button class="btn btn-primary btn-lg" onclick="addToCart()" ${product.stock === 0 ? 'disabled style="opacity:0.5"' : ''}>
+            🛒 Add to Cart
+          </button>
+          <button class="btn btn-outline btn-lg" onclick="buyNow()" ${product.stock === 0 ? 'disabled style="opacity:0.5"' : ''}>
+            Buy Now →
+          </button>
+        </div>
+
+        <div style="background:var(--gray-light);border-radius:var(--radius);padding:1.2rem;margin-top:2rem;display:flex;flex-direction:column;gap:0.5rem">
+          <div style="display:flex;align-items:center;gap:0.8rem;font-size:0.85rem"><span>🚚</span> Free delivery in Sohag</div>
+          <div style="display:flex;align-items:center;gap:0.8rem;font-size:0.85rem"><span>🔄</span> 14-day return policy</div>
+          <div style="display:flex;align-items:center;gap:0.8rem;font-size:0.85rem"><span>✅</span> Authentic product guarantee</div>
+          <div style="display:flex;align-items:center;gap:0.8rem;font-size:0.85rem"><span>📞</span> Support: 010 68333271</div>
+        </div>
+      </div>
+    </div>`;
+
+  // Reviews
+  document.getElementById('reviews-section').style.display = 'block';
+  renderReviews(product.reviews || []);
+
+  // Check if logged in for review form
+  const user = Auth.get();
+  if (!user) {
+    document.getElementById('review-form').style.display = 'none';
+    document.getElementById('review-login-prompt').style.display = 'block';
+  }
+
+  initStarSelector();
+  initReviewForm(product.id);
+}
+
+function selectSize(size, btn) {
+  selectedSize = size;
+  document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function selectColor(color, btn) {
+  selectedColor = color;
+  document.querySelectorAll('.color-chip').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function changeQty(delta) {
+  quantity = Math.max(1, Math.min(currentProduct.stock, quantity + delta));
+  document.getElementById('qty-input').value = quantity;
+}
+
+function addToCart() {
+  if (!selectedSize && currentProduct.sizes) return showToast('Please select a size', 'error');
+  if (!selectedColor && currentProduct.colors) return showToast('Please select a color', 'error');
+  Cart.add({
+    product_id: currentProduct.id,
+    name: currentProduct.name,
+    price: currentProduct.sale_price || currentProduct.price,
+    quantity,
+    size: selectedSize || 'One Size',
+    color: selectedColor || 'Default',
+    image_url: currentProduct.image_url
+  });
+}
+
+function buyNow() {
+  addToCart();
+  setTimeout(() => window.location.href = '/pages/checkout.html', 400);
+}
+
+function renderReviews(reviews) {
+  const container = document.getElementById('reviews-list');
+  if (!reviews.length) {
+    container.innerHTML = `<p style="color:var(--gray-mid);text-align:center;padding:2rem">No reviews yet. Be the first to review!</p>`;
+    return;
+  }
+  container.innerHTML = reviews.map(r => `
+    <div style="background:white;border-radius:12px;padding:1.5rem;margin-bottom:1rem;box-shadow:var(--shadow);border-left:4px solid var(--amber)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.8rem">
+        <div>
+          <div style="font-weight:700">${r.user_name || 'Customer'}</div>
+          <div>${renderStars(r.rating)}</div>
+        </div>
+        <div style="font-size:0.8rem;color:var(--gray-mid)">${formatDate(r.created_at)}</div>
+      </div>
+      <p style="color:var(--gray-dark)">${r.comment}</p>
+    </div>
+  `).join('');
+}
+
+function initStarSelector() {
+  const stars = document.querySelectorAll('#star-selector span');
+  stars.forEach((star, i) => {
+    star.addEventListener('click', () => {
+      document.getElementById('review-rating').value = i + 1;
+      stars.forEach((s, j) => s.textContent = j <= i ? '★' : '☆');
+    });
+    star.addEventListener('mouseenter', () => {
+      stars.forEach((s, j) => s.textContent = j <= i ? '★' : '☆');
+    });
+  });
+  document.getElementById('star-selector').addEventListener('mouseleave', () => {
+    const val = parseInt(document.getElementById('review-rating').value) || 0;
+    stars.forEach((s, j) => s.textContent = j < val ? '★' : '☆');
+  });
+}
+
+function initReviewForm(productId) {
+  document.getElementById('review-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const user = Auth.get();
+    if (!user) return openModal('login-modal');
+    const rating = parseInt(document.getElementById('review-rating').value);
+    const comment = document.getElementById('review-comment').value;
+    if (!rating) return showToast('Please select a rating', 'error');
+    if (!comment.trim()) return showToast('Please write a review', 'error');
+    await API.post('/reviews', { product_id: productId, user_id: user.id, rating, comment });
+    showToast('Review submitted! Thank you 🙏', 'success');
+    document.getElementById('review-comment').value = '';
+    document.getElementById('review-rating').value = 0;
+    document.querySelectorAll('#star-selector span').forEach(s => s.textContent = '☆');
+    setTimeout(() => location.reload(), 800);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', loadProduct);
+</script>
+</body>
+</html>

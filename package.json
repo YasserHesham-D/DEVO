@@ -1,0 +1,17 @@
+{
+  "name": "devo-store",
+  "version": "1.0.0",
+  "description": "DEVO Store - Premium Footwear Ecommerce for Sohag, Egypt",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["ecommerce","footwear","shoes","sohag","egypt"],
+  "author": "DEVO Store",
+  "license": "ISC",
+  "dependencies": {
+    "better-sqlite3": "^9.4.3",
+    "express": "^4.18.2"
+  }
+}

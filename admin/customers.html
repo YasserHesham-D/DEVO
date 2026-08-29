@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customers — DEVO Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar-logo">
+      <a href="/index.html" class="logo-text" style="text-decoration:none;display:block">DE<span style="color:var(--amber)">V</span>O</a>
+      <div style="color:rgba(255,255,255,0.4);font-size:0.75rem;margin-top:4px;text-transform:uppercase;letter-spacing:0.1em">Admin Panel</div>
+    </div>
+    <nav class="admin-nav">
+      <a href="dashboard.html" class="admin-nav-item"><span class="nav-icon">📊</span> Dashboard</a>
+      <a href="products.html" class="admin-nav-item"><span class="nav-icon">👟</span> Products</a>
+      <a href="orders.html" class="admin-nav-item"><span class="nav-icon">📦</span> Orders</a>
+      <a href="customers.html" class="admin-nav-item active"><span class="nav-icon">👥</span> Customers</a>
+      <div style="border-top:1px solid rgba(255,255,255,0.1);margin:1rem 0"></div>
+      <a href="/index.html" class="admin-nav-item"><span class="nav-icon">🏪</span> View Store</a>
+      <a href="#" class="admin-nav-item" onclick="Auth.logout()" style="color:var(--danger)!important"><span class="nav-icon">🚪</span> Logout</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h2>👥 Customers</h2>
+      <input type="text" placeholder="Search customers..." id="cust-search"
+        style="padding:8px 16px;border:2px solid var(--gray-light);border-radius:var(--radius);font-size:0.85rem;outline:none;width:250px"
+        oninput="filterCustomers(this.value)">
+    </div>
+
+    <div class="admin-content">
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h3>All Customers</h3>
+          <span id="cust-count" style="color:var(--gray-mid);font-size:0.85rem"></span>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Role</th>
+                <th>Joined</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="customers-tbody">
+              <tr><td colspan="6"><div class="loader"><div class="spinner"></div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="../js/main.js"></script>
+<script>
+(function() { const u = Auth.get(); if (!u || u.role !== 'admin') window.location.href = '/index.html'; })();
+
+let allCustomers = [];
+
+async function loadCustomers() {
+  allCustomers = await API.get('/users');
+  renderCustomers(allCustomers);
+}
+
+function filterCustomers(q) {
+  const filtered = allCustomers.filter(c =>
+    c.name.toLowerCase().includes(q.toLowerCase()) ||
+    c.email.toLowerCase().includes(q.toLowerCase())
+  );
+  renderCustomers(filtered);
+}
+
+function renderCustomers(customers) {
+  document.getElementById('cust-count').textContent = `${customers.length} user${customers.length !== 1 ? 's' : ''}`;
+  document.getElementById('customers-tbody').innerHTML = customers.length ? customers.map(c => `
+    <tr>
+      <td>
+        <div style="display:flex;align-items:center;gap:0.8rem">
+          <div style="width:36px;height:36px;background:var(--amber);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--black)">
+            ${c.name.charAt(0).toUpperCase()}
+          </div>
+          <strong>${c.name}</strong>
+        </div>
+      </td>
+      <td>${c.email}</td>
+      <td>${c.phone || '—'}</td>
+      <td>
+        <span class="status-badge ${c.role === 'admin' ? 'status-shipped' : 'status-pending'}">
+          ${c.role === 'admin' ? '⭐ Admin' : '👤 Customer'}
+        </span>
+      </td>
+      <td>${formatDate(c.created_at)}</td>
+      <td>
+        ${c.role !== 'admin' ? `<button class="btn btn-sm" style="background:var(--danger);color:white" onclick="deleteCustomer(${c.id}, '${c.name}')">🗑️ Delete</button>` : '—'}
+      </td>
+    </tr>
+  `).join('') : '<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">👥</div><h3>No customers yet</h3></div></td></tr>';
+}
+
+async function deleteCustomer(id, name) {
+  if (!confirm(`Delete customer "${name}"? This cannot be undone.`)) return;
+  await API.delete(`/users/${id}`);
+  showToast('Customer deleted', 'success');
+  loadCustomers();
+}
+
+document.addEventListener('DOMContentLoaded', loadCustomers);
+</script>
+</body>
+</html>

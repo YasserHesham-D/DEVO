@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — DEVO Store</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="admin-layout">
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar-logo">
+      <a href="/index.html" class="logo-text" style="text-decoration:none;display:block">DE<span style="color:var(--amber)">V</span>O</a>
+      <div style="color:rgba(255,255,255,0.4);font-size:0.75rem;margin-top:4px;text-transform:uppercase;letter-spacing:0.1em">Admin Panel</div>
+    </div>
+    <nav class="admin-nav">
+      <a href="dashboard.html" class="admin-nav-item active"><span class="nav-icon">📊</span> Dashboard</a>
+      <a href="products.html" class="admin-nav-item"><span class="nav-icon">👟</span> Products</a>
+      <a href="orders.html" class="admin-nav-item"><span class="nav-icon">📦</span> Orders</a>
+      <a href="customers.html" class="admin-nav-item"><span class="nav-icon">👥</span> Customers</a>
+      <div style="border-top:1px solid rgba(255,255,255,0.1);margin:1rem 0"></div>
+      <a href="/index.html" class="admin-nav-item"><span class="nav-icon">🏪</span> View Store</a>
+      <a href="#" class="admin-nav-item" onclick="Auth.logout()" style="color:var(--danger)!important"><span class="nav-icon">🚪</span> Logout</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h2>📊 Dashboard Overview</h2>
+      <div style="display:flex;align-items:center;gap:1rem">
+        <span style="font-size:0.85rem;color:var(--gray-mid)" id="admin-greeting">Welcome, Admin</span>
+        <div style="width:36px;height:36px;background:var(--amber);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem">👤</div>
+      </div>
+    </div>
+
+    <div class="admin-content">
+      <!-- Stats -->
+      <div class="stats-grid" id="stats-grid">
+        <div class="stat-card"><div class="stat-icon">📦</div><div><div class="stat-value" id="stat-orders">—</div><div class="stat-label">Total Orders</div></div></div>
+        <div class="stat-card"><div class="stat-icon">💰</div><div><div class="stat-value" id="stat-revenue">—</div><div class="stat-label">Revenue</div></div></div>
+        <div class="stat-card"><div class="stat-icon">👟</div><div><div class="stat-value" id="stat-products">—</div><div class="stat-label">Products</div></div></div>
+        <div class="stat-card"><div class="stat-icon">👥</div><div><div class="stat-value" id="stat-customers">—</div><div class="stat-label">Customers</div></div></div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem">
+        <a href="products.html" class="btn btn-primary" style="justify-content:center">+ Add Product</a>
+        <a href="orders.html" class="btn btn-dark" style="justify-content:center">View Orders</a>
+        <a href="customers.html" class="btn btn-outline" style="justify-content:center">View Customers</a>
+        <a href="/index.html" class="btn btn-outline" style="justify-content:center" target="_blank">View Store ↗</a>
+      </div>
+
+      <!-- Recent Orders -->
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h3>📦 Recent Orders</h3>
+          <a href="orders.html" style="color:var(--amber);font-size:0.85rem;text-decoration:none">View All →</a>
+        </div>
+        <div id="recent-orders-table" style="overflow-x:auto">
+          <div class="loader"><div class="spinner"></div></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="../js/main.js"></script>
+<script>
+// Admin guard
+(function() {
+  const user = Auth.get();
+  if (!user || user.role !== 'admin') window.location.href = '/index.html';
+  document.getElementById('admin-greeting').textContent = `Welcome, ${user.name}`;
+})();
+
+async function loadDashboard() {
+  const stats = await API.get('/stats');
+  document.getElementById('stat-orders').textContent = stats.total_orders;
+  document.getElementById('stat-revenue').textContent = `EGP ${Number(stats.total_revenue).toLocaleString()}`;
+  document.getElementById('stat-products').textContent = stats.total_products;
+  document.getElementById('stat-customers').textContent = stats.total_customers;
+
+  const orders = stats.recent_orders;
+  document.getElementById('recent-orders-table').innerHTML = orders.length ? `
+    <table class="admin-table">
+      <thead><tr><th>Order #</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>
+      <tbody>
+        ${orders.map(o => `
+          <tr>
+            <td><strong>#${o.id}</strong></td>
+            <td>${o.customer_name || o.shipping_name || 'Guest'}</td>
+            <td>${formatPrice(o.total)}</td>
+            <td><span class="status-badge status-${o.status}">${o.status}</span></td>
+            <td>${formatDate(o.created_at)}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  ` : '<div class="empty-state"><div class="empty-icon">📦</div><h3>No orders yet</h3></div>';
+}
+
+document.addEventListener('DOMContentLoaded', loadDashboard);
+</script>
+</body>
+</html>
