@@ -1,6 +1,6 @@
-node_modules
-*.db
 .git
-.gitignore
+__pycache__
+*.py
+*.pyc
+tools/
 README.md
-*.zip
